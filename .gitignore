@@ -1,0 +1,7 @@
+files/
+.env
+venv/
+src/checkpoints/
+src/reports/
+.ipynb_checkpoints/
+__pycache__/
