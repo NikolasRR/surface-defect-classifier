@@ -1,9 +1,12 @@
-torch
-torchvision
-scikit-learn
-matplotlib
-seaborn
-pillow
-numpy
-jupyter
-ipykernel
+# Torch/torchvision resolved to the CPU-only builds on this machine (no GPU
+# available) - torch.__version__ reports "2.13.0+cpu" / "0.28.0+cpu" at runtime.
+torch==2.13.0
+torchvision==0.28.0
+scikit-learn==1.9.0
+matplotlib==3.11.0
+seaborn==0.13.2
+pillow==12.3.0
+numpy==2.5.1
+jupyter==1.1.1
+ipykernel==7.3.0
+python-docx==1.2.0

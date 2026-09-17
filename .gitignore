@@ -5,3 +5,4 @@ src/checkpoints/
 src/reports/
 .ipynb_checkpoints/
 __pycache__/
+.claude/

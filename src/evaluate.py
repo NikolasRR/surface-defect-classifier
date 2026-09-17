@@ -2,6 +2,8 @@
 and a live (not hardcoded) stage1-vs-stage2 accuracy comparison.
 """
 
+import time
+
 import matplotlib.pyplot as plt
 import seaborn as sns
 import torch
@@ -66,6 +68,38 @@ def accuracy(model, loader, device):
         correct += (outputs.argmax(1) == labels).sum().item()
         total += labels.size(0)
     return correct / total
+
+
+@torch.no_grad()
+def measure_inference_time(model, dataset, device, num_warmup=5):
+    """Times classifying one image at a time (single-image latency), the
+    realistic case for "how long until a result comes back" rather than
+    batched throughput. `dataset` must be indexable and return (image, label).
+    """
+    model.eval()
+    n = len(dataset)
+    warmup_n = min(num_warmup, n)
+    for i in range(warmup_n):
+        img, _ = dataset[i]
+        model(img.unsqueeze(0).to(device))
+
+    per_image_seconds = []
+    for i in range(n):
+        img, _ = dataset[i]
+        img = img.unsqueeze(0).to(device)
+        t0 = time.perf_counter()
+        model(img)
+        t1 = time.perf_counter()
+        per_image_seconds.append(t1 - t0)
+
+    total = sum(per_image_seconds)
+    return {
+        "num_images": n,
+        "total_seconds": total,
+        "mean_seconds_per_image": total / n,
+        "min_seconds_per_image": min(per_image_seconds),
+        "max_seconds_per_image": max(per_image_seconds),
+    }
 
 
 def compare_stage1_vs_stage2(stage1_model, stage2_model, loader, device, split_name="test"):

@@ -19,6 +19,10 @@ class Config:
     architecture: str = "resnet18"
     seed: int = 42
 
+    # Appended to checkpoint/history/report filenames (e.g. "_1", "_2") to
+    # distinguish repeated runs of the same architecture without overwriting them.
+    run_label: str = ""
+
     image_size: int = 224
     batch_size: int = 32
 
@@ -36,3 +40,6 @@ class Config:
     train_dir: Path = TRAIN_DIR
     validation_dir: Path = VALIDATION_DIR
     checkpoint_dir: Path = CHECKPOINT_DIR
+
+    def run_id(self) -> str:
+        return f"{self.architecture}{self.run_label}"
