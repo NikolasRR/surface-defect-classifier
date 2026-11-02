@@ -1,7 +1,8 @@
 files/
 .env
 venv/
-src/checkpoints/
+src/checkpoints/*
+!src/checkpoints/*_history.json
 src/reports/
 .ipynb_checkpoints/
 __pycache__/
